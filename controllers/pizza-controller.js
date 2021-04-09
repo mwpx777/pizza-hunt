@@ -1,7 +1,8 @@
-const pizza = require('../models');
+const { Pizza } = require('../models');
+
+// the functions will go here as METHODS of pizzaController
 
 const pizzaController = {
-    // the functions will go here as methods of pizzaController
     // get all pizzas CALLBACK FUNCTION for GET /api/pizzas route
     // this uses Mongoose find() method
     getAllPizza(req, res) {
@@ -34,16 +35,17 @@ const pizzaController = {
     // create pizza as a POST /api/pizza
     // destructuring body from the express.js request object
     // {body} is the request in this callback function
-    createPizza({body}, res) {
+ 
+    createPizza({ body }, res) {
         Pizza.create(body)
-        .then(dbPizzaData => res.json(dbPizzaData))
-        .catch(err =>res.status(404).json(err));
-    },
+          .then(dbPizzaData => res.json(dbPizzaData))
+          .catch(err => res.json(err));
+      },
 
     // update pizza by ID
     // {new:true} instructs Mongoose to return the new version of the document
-    updatePizza({params, body}, res){
-        Pizza.findOneAndUpdate({_id: params_id} , body, {new: true})
+    updatePizza({ params, body}, res){
+        Pizza.findOneAndUpdate({_id: params.id} , body, {new: true})
         .then(dbPizzaData => {
             if(!dbPizzaData) {
                 res.status(404).json({message: "No pizza found with this id!"})
@@ -56,7 +58,7 @@ const pizzaController = {
 
     // delete Pizza
     deletePizza({params}, res) {
-        Pizza.findOneAndDelete({_id: params_id})
+        Pizza.findOneAndDelete({_id: params.id})
         .then(dbPizzaData => {
             if(!dbPizzaData) {
                 res.status(404).json({message: "No pizza found with this id!"})
