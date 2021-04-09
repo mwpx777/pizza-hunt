@@ -5,8 +5,18 @@ const { Pizza } = require('../models');
 const pizzaController = {
     // get all pizzas CALLBACK FUNCTION for GET /api/pizzas route
     // this uses Mongoose find() method
-    getAllPizza(req, res) {
+    getAllPizzas(req, res) {
         Pizza.find({})
+        // this will populate all of the pizza comments 
+        .populate({
+            path: 'comments',
+            // the - tells the request to ignore the comment's __v field
+            select: '-__v'
+        })
+        // this ignores the pizza's __v field
+        .select('-__v')
+        // this will sort the pizzas in decending order (newest pizza first)
+        .sort({_id: -1})
         .then(dbPizzaData => res.json(dbPizzaData))
         .catch(err =>{
             console.log(err);
@@ -18,6 +28,11 @@ const pizzaController = {
     // destructuring params from pizza request
     getPizzaById({params}, res) {
         Pizza.findOne({_id: params.id})
+        .populate({
+            path: 'comments',
+            select: '-__v'
+        })
+        .select('-__v')
         .then(dbPizzaData => {
             // if not found send 404
             if(!dbPizzaData){
