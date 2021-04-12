@@ -3,10 +3,16 @@ const dateFormat = require('../utils/dateFormat');
 
 const PizzaSchema = new Schema ({
     pizzaName: {
-        type: String
+        type: String,
+        required: true,
+        // or required: 'Please provide a pizzaName!'
+        trim: true
     },
     createdBy: {
-        type: String
+        type: String,
+        required: true,
+        // or required: 'Please provide a createdBy name!'
+        trim: true
     },
     createdAt: {
         type: Date,
@@ -16,6 +22,10 @@ const PizzaSchema = new Schema ({
     },
     size: {
         type: String,
+        required: true,
+        // enum stands for enumerable - set of data that can be iterated over (like for loop)
+        // this will prevent a use from adding a size that isn't listed in array ('super mega large')
+        enum: ['Personal', 'Small', 'Medium', 'Large', 'Extra Large'],
         default: 'Large'
     },
     toppings: [],

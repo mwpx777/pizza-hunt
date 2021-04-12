@@ -71,6 +71,8 @@ const handlePizzaSubmit = event => {
   })
   .catch(err => {
     console.log(err);
+    // if there is an error with posting, the formData will be passed to saveRecord() so the formData is captured and saved in 'new_pizza' object store in browsers indexedDB database pizza_hunt
+    saveRecord(formData);
   });
 };
 
