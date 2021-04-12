@@ -126,7 +126,7 @@ function handleNewCommentSubmit(event) {
       response.json();
     })
     .then(commentResponse => {
-      // console.log(commentResponse);
+      console.log(commentResponse);
       location.reload();
     })
     .catch(err => {
