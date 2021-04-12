@@ -27,6 +27,32 @@ const commentController = {
             .catch(err => res.json(err));
 
     },
+    addReply({ params, body }, res) {
+        Comment.findOneAndUpdate(
+            { _id: params.commentId },
+            { $push: { replies: body } },
+            { new: true }
+        )
+            .then(dbPizzaData => {
+                if (!dbPizzaData) {
+                    res.status(404).json({ message: 'No pizza found with this id!' });
+                    return;
+                }
+                res.json(dbPizzaData);
+            })
+            .catch(err => res.json(err));
+
+    },
+    removeReply({ params }, res) {
+        Comment.findOneAndUpdate(
+            {_id: params.commentId},
+            // $pull removes the specific reply from replies array with replyId
+            {$pull: {replies: {replyId: params.replyId}}},
+            {new: true}
+        )
+        .then(dbPizzaData => res.json(dbPizzaData))
+        .catch(err => res.json(err));
+    },
 
     // remove comment
     removeComment({ params }, res) {
@@ -37,16 +63,16 @@ const commentController = {
                 }
                 return Pizza.findOneAndUpdate(
                     // gets pizzaId
-                    { _id: params.pizzaId},
+                    { _id: params.pizzaId },
                     // pulls the comment from pizza as commentId
-                    {$pull: {comments: params.commentId}},
+                    { $pull: { comments: params.commentId } },
                     // rewrites pizza data
-                    {new: true}
-                    );
+                    { new: true }
+                );
             })
             .then(dbPizzaData => {
-                if(!dbPizzaData){
-                    res.status(400).json({message: 'No pizza fount with this id!'});
+                if (!dbPizzaData) {
+                    res.status(400).json({ message: 'No pizza fount with this id!' });
                     return;
                 }
                 res.json(dbPizzaData);
